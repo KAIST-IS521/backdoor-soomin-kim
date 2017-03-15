@@ -15,9 +15,10 @@ static bool is_running = true;
 /*
  * [START] functions for each instructions
  */
-//void op_halt(struct VMContext *ctx, const uint32_t instr) {
-    
-//}
+void op_halt(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__unused__)) const uint32_t instr) {
+    // To exit from loop
+    is_running = false;
+}
 /*
  * [END] functions for each instructions
  */
@@ -34,8 +35,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     }
 
     // TODO: initialize function pointers
-    // f[0x00] = halt;
-    // f[0x10] = load;
+    f[0x00] = op_halt;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
@@ -86,7 +86,8 @@ uint32_t *loadCodeSegment(char *filename) {
     bytecode = calloc(4, adjustedSize >> 2);
 
     // Read bytecode from file
-    readBytes = fread(bytecode, originalSize, 1, fp);
+    readBytes = fread(bytecode, 1, originalSize, fp);
+
     if (readBytes != originalSize) {
         perror("fread");
         return NULL;
