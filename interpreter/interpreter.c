@@ -83,7 +83,7 @@ uint32_t *loadCodeSegment(char *filename) {
     adjustedSize += 4;
 
     // Allocate memory for bytecode
-    bytecode = calloc(4, adjustedSize >> 2);
+    bytecode = calloc(adjustedSize >> 2, 4);
 
     // Read bytecode from file
     readBytes = fread(bytecode, 1, originalSize, fp);
@@ -106,7 +106,8 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
-    uint32_t* codeSegment; // Memory Space that stores pieces of codes.
+    uint32_t *codeSegment; // Memory Space that stores pieces of codes
+    uint8_t *dataSegment; // Memory Space that stores data
     uint32_t* pc;
 
     // There should be at least one argument.
@@ -121,8 +122,10 @@ int main(int argc, char** argv) {
     if (codeSegment == NULL) {
         return 1;
     }
+    // Allocate heap memory
+    dataSegment = calloc(8192, 1);
     // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment);
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment, dataSegment);
 
     // Set pc to point at the beginning of bytecode
     pc = codeSegment;
