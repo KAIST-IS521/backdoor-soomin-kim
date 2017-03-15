@@ -114,6 +114,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // Set pc to point at the beginning of bytecode
+    pc = (uint32_t *)bytecode;
+
     while (is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm, &pc);
