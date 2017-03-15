@@ -12,6 +12,16 @@
 // Global variable that indicates if the process is running.
 static bool is_running = true;
 
+/*
+ * [START] functions for each instructions
+ */
+//void op_halt(struct VMContext *ctx, const uint32_t instr) {
+    
+//}
+/*
+ * [END] functions for each instructions
+ */
+
 void usageExit() {
     // TODO: show usage
     exit(1);
@@ -40,11 +50,11 @@ void initRegs(Reg *r, uint32_t cnt)
 /*
  * This function is for loading bytecodes from file to memory.
  */
-char *loadByteCode(char *filename) {
+uint32_t *loadCodeSegment(char *filename) {
     FILE *fp;
     long originalSize;
     long adjustedSize;
-    char *bytecode;
+    uint32_t *bytecode;
     long readBytes;
 
     // Load bytecode file
@@ -73,7 +83,7 @@ char *loadByteCode(char *filename) {
     adjustedSize += 4;
 
     // Allocate memory for bytecode
-    bytecode = calloc(1, adjustedSize);
+    bytecode = calloc(4, adjustedSize >> 2);
 
     // Read bytecode from file
     readBytes = fread(bytecode, originalSize, 1, fp);
@@ -83,7 +93,7 @@ char *loadByteCode(char *filename) {
     }
 
     // Mark the end of bytecode
-    *(uint32_t *)(bytecode + adjustedSize - 4) = 0xffffffff;
+    bytecode[(adjustedSize >> 2) - 1] = 0xffffffff;
 
     // There is no reason to open file pointer until process is killed
     fclose(fp);
@@ -95,7 +105,7 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
-    char* bytecode; // Memory Space that stores pieces of codes.
+    uint32_t* codeSegment; // Memory Space that stores pieces of codes.
     uint32_t* pc;
 
     // There should be at least one argument.
@@ -105,17 +115,16 @@ int main(int argc, char** argv) {
     initRegs(r, NUM_REGS);
     // Initialize interpretation functions.
     initFuncs(f, NUM_FUNCS);
-    // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f);
-
     // Load bytecode from file
-    bytecode = loadByteCode(argv[1]);
-    if (bytecode == NULL) {
+    codeSegment = loadCodeSegment(argv[1]);
+    if (codeSegment == NULL) {
         return 1;
     }
+    // Initialize VM context.
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment);
 
     // Set pc to point at the beginning of bytecode
-    pc = (uint32_t *)bytecode;
+    pc = codeSegment;
 
     while (is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
