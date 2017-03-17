@@ -91,6 +91,19 @@ void opAdd(struct VMContext *ctx, const uint32_t instr) {
     // Add 1st arg and 2nd arg, and store the result to 0th arg
     ctx->r[reg0].value = ctx->r[reg1].value + ctx->r[reg2].value;
 }
+
+void opSub(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of add
+    uint8_t reg1; // 1st arg of add
+    uint8_t reg2; // 2nd arg of add
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+    reg2 = EXTRACT_B3(instr);
+
+    // Subtract from 1st arg to 2nd arg, and store the result to 0th arg
+    ctx->r[reg0].value = ctx->r[reg1].value - ctx->r[reg2].value;
+}
 /*
  * [END] functions for each instructions
  */
@@ -113,6 +126,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x30] = opMove;
     f[0x40] = opPuti;
     f[0x50] = opAdd;
+    f[0x60] = opSub;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
