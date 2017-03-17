@@ -56,6 +56,17 @@ void opStore(struct VMContext *ctx, const uint32_t instr) {
     // Move value from register to memory
     ctx->dataSegment[ctx->r[reg0].value] = 0xff & ctx->r[reg0].value;
 }
+
+void opMove(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of move
+    uint8_t reg1; // 1st arg of move
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+
+    // Move value from register to register
+    ctx->r[reg0].value = ctx->r[reg1].value;
+}
 /*
  * [END] functions for each instructions
  */
@@ -75,6 +86,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x00] = opHalt;
     f[0x10] = opLoad;
     f[0x20] = opStore;
+    f[0x30] = opMove;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
