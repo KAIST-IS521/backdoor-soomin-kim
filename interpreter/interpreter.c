@@ -12,12 +12,34 @@
 // Global variable that indicates if the process is running.
 static bool is_running = true;
 
+void dsRangeCheck(uint32_t addr) {
+    if (addr >= 8192) {
+        printf("invalid data section address range\n");
+        exit(1);
+    }
+}
+
 /*
  * [START] functions for each instructions
  */
-void op_halt(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__unused__)) const uint32_t instr) {
+void opHalt(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__unused__)) const uint32_t instr) {
     // To exit from loop
     is_running = false;
+}
+
+void opLoad(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 1st arg of load
+    uint8_t reg1; // 2nd arg of load
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+
+    // Check the address validity
+    dsRangeCheck(ctx->r[reg0].value);
+    dsRangeCheck(ctx->r[reg1].value);
+
+    // Move value from memory to register
+    ctx->r[reg0].value = 0 | ctx->dataSegment[ctx->r[reg1].value];
 }
 /*
  * [END] functions for each instructions
@@ -35,7 +57,8 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     }
 
     // TODO: initialize function pointers
-    f[0x00] = op_halt;
+    f[0x00] = opHalt;
+    f[0x10] = opLoad;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
