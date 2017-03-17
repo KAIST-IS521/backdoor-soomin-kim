@@ -184,6 +184,14 @@ void opJump(struct VMContext *ctx, const uint32_t instr) {
     // Change the value of pc
     ctx->pc = &ctx->codeSegment[imm0 - 1];
 }
+
+void opPuts(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of puts
+
+    reg0 = EXTRACT_B1(instr);
+
+    printf("%s", (char *) &ctx->dataSegment[ctx->r[reg0].value]);
+}
 /*
  * [END] functions for each instructions
  */
@@ -212,6 +220,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x90] = opEq;
     f[0xa0] = opIte;
     f[0xb0] = opJump;
+    f[0xc0] = opPuts;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
