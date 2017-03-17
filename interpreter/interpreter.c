@@ -192,6 +192,14 @@ void opPuts(struct VMContext *ctx, const uint32_t instr) {
 
     printf("%s", (char *) &ctx->dataSegment[ctx->r[reg0].value]);
 }
+
+void opGets(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of gets
+
+    reg0 = EXTRACT_B1(instr);
+
+    gets((char *) &ctx->dataSegment[ctx->r[reg0].value]);
+}
 /*
  * [END] functions for each instructions
  */
@@ -221,6 +229,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0xa0] = opIte;
     f[0xb0] = opJump;
     f[0xc0] = opPuts;
+    f[0xd0] = opGets;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
