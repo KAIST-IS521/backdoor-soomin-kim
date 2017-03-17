@@ -246,8 +246,6 @@ void initRegs(Reg *r, uint32_t cnt)
  */
 uint32_t *loadCodeSegment(char *filename) {
     FILE *fp;
-    long originalSize;
-    long adjustedSize;
     uint32_t *bytecode;
     long readBytes;
 
@@ -258,37 +256,20 @@ uint32_t *loadCodeSegment(char *filename) {
         return NULL;
     }
 
-    // Calculate size of bytecode file
-    fseek(fp, 0, SEEK_END);
-    originalSize = ftell(fp);
-    if (originalSize == -1) {
-        perror("ftell");
-        return NULL;
-    }
-    fseek(fp, 0, SEEK_SET);
-
-    // Make size multiple of 4
-    if ((originalSize & 0x3) != 0) {
-        adjustedSize = ((originalSize >> 2) + 1) << 2;
-    } else {
-        adjustedSize = originalSize;
-    }
-    // Add 4 to size to mark the end of bytecode
-    adjustedSize += 4;
-
     // Allocate memory for bytecode
-    bytecode = calloc(adjustedSize >> 2, 4);
+    bytecode = calloc(257, 4);
 
     // Read bytecode from file
-    readBytes = fread(bytecode, 1, originalSize, fp);
-
-    if (readBytes != originalSize) {
-        perror("fread");
-        return NULL;
+    readBytes = fread(bytecode, 4, 256, fp);
+    if (readBytes == 0) {
+        if (feof(fp) != 0) {
+            printf("Input File was empty\n");
+            return NULL;
+        } else {
+            perror("fread");
+            return NULL;
+        }
     }
-
-    // Mark the end of bytecode
-    bytecode[(adjustedSize >> 2) - 1] = 0xffffffff;
 
     // There is no reason to open file pointer until process is killed
     fclose(fp);
