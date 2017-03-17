@@ -28,8 +28,8 @@ void opHalt(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__
 }
 
 void opLoad(struct VMContext *ctx, const uint32_t instr) {
-    uint8_t reg0; // 1st arg of load
-    uint8_t reg1; // 2nd arg of load
+    uint8_t reg0; // 0th arg of load
+    uint8_t reg1; // 1st arg of load
 
     reg0 = EXTRACT_B1(instr);
     reg1 = EXTRACT_B2(instr);
@@ -40,6 +40,21 @@ void opLoad(struct VMContext *ctx, const uint32_t instr) {
 
     // Move value from memory to register
     ctx->r[reg0].value = 0 | ctx->dataSegment[ctx->r[reg1].value];
+}
+
+void opStore(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of store
+    uint8_t reg1; // 1st arg of store
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+
+    // Check the address validity
+    dsRangeCheck(ctx->r[reg0].value);
+    dsRangeCheck(ctx->r[reg1].value);
+
+    // Move value from register to memory
+    ctx->dataSegment[ctx->r[reg0].value] = 0xff & ctx->r[reg0].value;
 }
 /*
  * [END] functions for each instructions
@@ -59,6 +74,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     // TODO: initialize function pointers
     f[0x00] = opHalt;
     f[0x10] = opLoad;
+    f[0x20] = opStore;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
