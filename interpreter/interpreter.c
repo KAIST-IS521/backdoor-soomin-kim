@@ -14,7 +14,7 @@ static bool is_running = true;
 
 void dsRangeCheck(uint32_t addr) {
     if (addr >= 8192) {
-        printf("invalid data section address range\n");
+        puts("[Error] Invalid data section address range");
         exit(1);
     }
 }
@@ -22,6 +22,12 @@ void dsRangeCheck(uint32_t addr) {
 /*
  * [START] functions for each instructions
  */
+void opInvalid(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__unused__)) const uint32_t instr) {
+    // This function is for invalid opcode
+    puts("[Error] Invalid opcode");
+    exit(1);
+}
+
 void opHalt(__attribute__((__unused__)) struct VMContext *ctx, __attribute__((__unused__)) const uint32_t instr) {
     // To exit from loop
     is_running = false;
@@ -212,7 +218,7 @@ void usageExit() {
 void initFuncs(FunPtr *f, uint32_t cnt) {
     uint32_t i;
     for (i = 0; i < cnt; i++) {
-        f[i] = NULL;
+        f[i] = opInvalid;
     }
 
     // TODO: initialize function pointers
