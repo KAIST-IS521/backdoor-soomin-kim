@@ -256,7 +256,6 @@ int main(int argc, char** argv) {
     FunPtr f[NUM_FUNCS];
     uint32_t *codeSegment; // Memory Space that stores pieces of codes
     uint8_t *dataSegment; // Memory Space that stores data
-    uint32_t* pc;
 
     // There should be at least one argument.
     if (argc < 2) usageExit();
@@ -275,12 +274,9 @@ int main(int argc, char** argv) {
     // Initialize VM context.
     initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment, dataSegment);
 
-    // Set pc to point at the beginning of bytecode
-    pc = codeSegment;
-
     while (is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
-        stepVMContext(&vm, &pc);
+        stepVMContext(&vm);
     }
 
     // Zero indicates normal termination.

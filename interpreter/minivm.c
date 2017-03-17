@@ -22,25 +22,26 @@ void dispatch(struct VMContext* ctx, const uint32_t instr) {
 // Initializes a VMContext in-place.
 // initVMContext :: VMContext -> uint32_t -> uint32_t -> [Reg] -> [FunPtr] -> Effect()
 void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t numFuns, Reg* registers, FunPtr* funtable, uint32_t *codeSegment, uint8_t *dataSegment) {
-    ctx->numRegs    = numRegs;
-    ctx->numFuns    = numFuns;
-    ctx->r          = registers;
-    ctx->funtable   = funtable;
+    ctx->numRegs     = numRegs;
+    ctx->numFuns     = numFuns;
+    ctx->r           = registers;
+    ctx->funtable    = funtable;
     ctx->codeSegment = codeSegment;
     ctx->dataSegment = dataSegment;
+    ctx->pc          = (uint32_t *) ctx->dataSegment;
 }
 
 
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
-void stepVMContext(struct VMContext* ctx, uint32_t** pc) {
+void stepVMContext(struct VMContext* ctx) {
     // Read a 32-bit bytecode instruction.
-    uint32_t instr = **pc;
+    uint32_t instr = ctx->pc;
 
     // Dispatch to an opcode-handler.
     dispatch(ctx, instr);
 
     // Increment to next instruction.
-    (*pc)++;
+    (ctx->pc)++;
 }
 
