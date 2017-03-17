@@ -28,7 +28,7 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
     ctx->funtable    = funtable;
     ctx->codeSegment = codeSegment;
     ctx->dataSegment = dataSegment;
-    ctx->pc          = (uint32_t *) ctx->dataSegment;
+    ctx->pc          = (uint32_t *) ctx->codeSegment;
 }
 
 
