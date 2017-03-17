@@ -93,9 +93,9 @@ void opAdd(struct VMContext *ctx, const uint32_t instr) {
 }
 
 void opSub(struct VMContext *ctx, const uint32_t instr) {
-    uint8_t reg0; // 0th arg of add
-    uint8_t reg1; // 1st arg of add
-    uint8_t reg2; // 2nd arg of add
+    uint8_t reg0; // 0th arg of sub
+    uint8_t reg1; // 1st arg of sub
+    uint8_t reg2; // 2nd arg of sub
 
     reg0 = EXTRACT_B1(instr);
     reg1 = EXTRACT_B2(instr);
@@ -103,6 +103,24 @@ void opSub(struct VMContext *ctx, const uint32_t instr) {
 
     // Subtract from 1st arg to 2nd arg, and store the result to 0th arg
     ctx->r[reg0].value = ctx->r[reg1].value - ctx->r[reg2].value;
+}
+
+void opGt(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of gt
+    uint8_t reg1; // 1st arg of gt
+    uint8_t reg2; // 2nd arg of gt
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+    reg2 = EXTRACT_B3(instr);
+
+    // Compare 1st arg and 2nd arg then set the 0th arg to 1 if 1st arg is
+    // greater than 2nd arg
+    if (ctx->r[reg1].value > ctx->r[reg2].value) {
+        ctx->r[reg0].value = 1;
+    } else {
+        ctx->r[reg0].value = 0;
+    }
 }
 /*
  * [END] functions for each instructions
@@ -127,6 +145,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x40] = opPuti;
     f[0x50] = opAdd;
     f[0x60] = opSub;
+    f[0x70] = opGt;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
