@@ -54,7 +54,7 @@ void opStore(struct VMContext *ctx, const uint32_t instr) {
     dsRangeCheck(ctx->r[reg1].value);
 
     // Move value from register to memory
-    ctx->dataSegment[ctx->r[reg0].value] = 0xff & ctx->r[reg0].value;
+    ctx->dataSegment[ctx->r[reg0].value] = 0xff & ctx->r[reg1].value;
 }
 
 void opMove(struct VMContext *ctx, const uint32_t instr) {
