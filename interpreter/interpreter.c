@@ -78,6 +78,19 @@ void opPuti(struct VMContext *ctx, const uint32_t instr) {
     // Load immediate value to register
     ctx->r[reg0].value = 0 | imm1;
 }
+
+void opAdd(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of add
+    uint8_t reg1; // 1st arg of add
+    uint8_t reg2; // 2nd arg of add
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+    reg2 = EXTRACT_B3(instr);
+
+    // Add 1st arg and 2nd arg, and store the result to 0th arg
+    ctx->r[reg0].value = ctx->r[reg1].value + ctx->r[reg2].value;
+}
 /*
  * [END] functions for each instructions
  */
@@ -99,6 +112,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x20] = opStore;
     f[0x30] = opMove;
     f[0x40] = opPuti;
+    f[0x50] = opAdd;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
