@@ -175,6 +175,15 @@ void opIte(struct VMContext *ctx, const uint32_t instr) {
         ctx->pc = &ctx->codeSegment[imm2 - 1];
     }
 }
+
+void opJump(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t imm0; // 0th arg of jump
+
+    imm0 = EXTRACT_B1(instr);
+
+    // Change the value of pc
+    ctx->pc = &ctx->codeSegment[imm0 - 1];
+}
 /*
  * [END] functions for each instructions
  */
@@ -202,6 +211,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x80] = opGe;
     f[0x90] = opEq;
     f[0xa0] = opIte;
+    f[0xb0] = opJump;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
