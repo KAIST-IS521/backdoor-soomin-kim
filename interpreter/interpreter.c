@@ -122,6 +122,24 @@ void opGt(struct VMContext *ctx, const uint32_t instr) {
         ctx->r[reg0].value = 0;
     }
 }
+
+void opGe(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of ge
+    uint8_t reg1; // 1st arg of ge
+    uint8_t reg2; // 2nd arg of ge
+
+    reg0 = EXTRACT_B1(instr);
+    reg1 = EXTRACT_B2(instr);
+    reg2 = EXTRACT_B3(instr);
+
+    // Compare 1st arg and 2nd arg then set the 0th arg to 1 if 1st arg is
+    // greater than or equal to 2nd arg
+    if (ctx->r[reg1].value >= ctx->r[reg2].value) {
+        ctx->r[reg0].value = 1;
+    } else {
+        ctx->r[reg0].value = 0;
+    }
+}
 /*
  * [END] functions for each instructions
  */
@@ -146,6 +164,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x50] = opAdd;
     f[0x60] = opSub;
     f[0x70] = opGt;
+    f[0x80] = opGe;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
