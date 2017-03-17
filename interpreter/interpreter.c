@@ -158,6 +158,23 @@ void opEq(struct VMContext *ctx, const uint32_t instr) {
         ctx->r[reg0].value = 0;
     }
 }
+
+void opIte(struct VMContext *ctx, const uint32_t instr) {
+    uint8_t reg0; // 0th arg of ite
+    uint8_t imm1; // 1st arg of ite
+    uint8_t imm2; // 2nd arg of ite
+
+    reg0 = EXTRACT_B1(instr);
+    imm1 = EXTRACT_B2(instr);
+    imm2 = EXTRACT_B3(instr);
+
+    // If 0th arg is greater than 0, then jump to 1st arg
+    if (ctx->r[reg0].value > 0) {
+        ctx->pc = &ctx->codeSegment[imm1 - 1];
+    } else {
+        ctx->pc = &ctx->codeSegment[imm2 - 1];
+    }
+}
 /*
  * [END] functions for each instructions
  */
@@ -184,6 +201,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x70] = opGt;
     f[0x80] = opGe;
     f[0x90] = opEq;
+    f[0xa0] = opIte;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
