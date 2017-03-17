@@ -210,8 +210,8 @@ void opGets(struct VMContext *ctx, const uint32_t instr) {
  * [END] functions for each instructions
  */
 
-void usageExit() {
-    // TODO: show usage
+void usageExit(const char *name) {
+    printf("Usage: %s [path-to-Mini-bytecode-file]\n", name);
     exit(1);
 }
 
@@ -221,7 +221,6 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
         f[i] = opInvalid;
     }
 
-    // TODO: initialize function pointers
     f[0x00] = opHalt;
     f[0x10] = opLoad;
     f[0x20] = opStore;
@@ -291,7 +290,7 @@ int main(int argc, char** argv) {
     uint8_t *dataSegment; // Memory Space that stores data
 
     // There should be at least one argument.
-    if (argc < 2) usageExit();
+    if (argc < 2) usageExit(argv[0]);
 
     // Initialize registers.
     initRegs(r, NUM_REGS);
@@ -308,7 +307,6 @@ int main(int argc, char** argv) {
     initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment, dataSegment);
 
     while (is_running) {
-        // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm);
     }
 
