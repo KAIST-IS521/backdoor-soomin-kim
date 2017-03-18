@@ -1,0 +1,140 @@
+puti r255, 1
+puti r254, 0x20
+puti r253, 0x3a
+puti r252, 0x74
+puti r251, 0x75
+puti r250, 0x70
+puti r249, 0x6e
+puti r248, 0x69
+puti r247, 0x20
+puti r246, 0x72
+puti r245, 0x75
+puti r244, 0x6f
+puti r243, 0x59
+puti r241, 0x20
+puti r240, 0x3a
+puti r239, 0x65
+puti r238, 0x72
+puti r237, 0x6f
+puti r236, 0x66
+puti r235, 0x65
+puti r234, 0x42
+puti r232, 0x20
+puti r231, 0x3a
+puti r230, 0x72
+puti r229, 0x65
+puti r228, 0x74
+puti r227, 0x66
+puti r226, 0x41
+puti r224, 0x0a
+puti r242, 243
+puti r220, 0x20
+puti r219, 0x24
+store r242, r243
+add r242, r242, r255
+store r242, r244
+add r242, r242, r255
+store r242, r245
+add r242, r242, r255
+store r242, r246
+add r242, r242, r255
+store r242, r247
+add r242, r242, r255
+store r242, r248
+add r242, r242, r255
+store r242, r249
+add r242, r242, r255
+store r242, r250
+add r242, r242, r255
+store r242, r251
+add r242, r242, r255
+store r242, r252
+add r242, r242, r255
+store r242, r253
+add r242, r242, r255
+store r242, r254
+puti r233, 234
+store r233, r234
+add r233, r233, r255
+store r233, r235
+add r233, r233, r255
+store r233, r236
+add r233, r233, r255
+store r233, r237
+add r233, r233, r255
+store r233, r238
+add r233, r233, r255
+store r233, r239
+add r233, r233, r255
+store r233, r240
+add r233, r233, r255
+store r233, r241
+puti r225, 226
+store r225, r226
+add r225, r225, r255
+store r225, r227
+add r225, r225, r255
+store r225, r228
+add r225, r225, r255
+store r225, r229
+add r225, r225, r255
+store r225, r230
+add r225, r225, r255
+store r225, r231
+add r225, r225, r255
+store r225, r232
+puti r223, 224
+store r223, r224
+puti r218, 221
+store r218, r219
+add r218, r218, r255
+store r218, r220
+puti r222, 0x80
+puti r221, 0x41
+store r222, r221
+add r222, r222, r255
+puti r221, 0x42
+store r222, r221
+add r222, r222, r255
+puti r221, 0x43
+store r222, r221
+add r222, r222, r255
+puti r221, 0x44
+store r222, r221
+puti r233, 234
+puts r233
+puti r222, 0x80
+puts r222
+puts r223
+puti r242, 243
+puts r242
+puti r0, 0
+gets r0
+puti r225, 226
+puts r225
+puts r222
+puts r223
+puti r1, 0x80
+load r2, r1
+puti r3, 0xde
+sub r2, r2, r3
+ite r2, 139, 121
+add r1, r1, r255
+load r2, r1
+puti r3, 0xad
+sub r2, r2, r3
+ite r2, 139, 126
+add r1, r1, r255
+load r2, r1
+puti r3, 0xbe
+sub r2, r2, r3
+ite r2, 139, 131
+add r1, r1, r255
+load r2, r1
+puti r3, 0xef
+sub r2, r2, r3
+ite r2, 139, 136
+puti r1, 221
+puts r1
+puts r223
+halt
