@@ -19,6 +19,21 @@ void dsRangeCheck(uint32_t addr) {
     }
 }
 
+uint32_t hashing(uint32_t *code) {
+    uint32_t result;
+    int i;
+
+    // Initialize the result
+    result = 0;
+    for (i = 0; i < 1024; i++) {
+        // Simply xor-ing each 4 bytes from address 0 to address 1023
+        // in the code segment
+        result ^= *(uint32_t *)((uint8_t *)code + i);
+    }
+
+    return result;
+}
+
 /*
  * [START] functions for each instructions
  */
