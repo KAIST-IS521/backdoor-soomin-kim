@@ -263,6 +263,10 @@ uint32_t *loadCodeSegment(char *filename) {
 
     // Allocate memory for bytecode
     bytecode = calloc(257, 4);
+    if (bytecode == NULL) {
+        perror("calloc");
+        return NULL;
+    }
 
     // Read bytecode from file
     readBytes = fread(bytecode, 4, 256, fp);
@@ -303,6 +307,10 @@ int main(int argc, char** argv) {
     }
     // Allocate heap memory
     dataSegment = calloc(8192, 1);
+    if (dataSegment == NULL) {
+        perror("calloc");
+        return 1;
+    }
     // Initialize VM context.
     initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, codeSegment, dataSegment);
 
